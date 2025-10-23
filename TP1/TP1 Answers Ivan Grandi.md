@@ -11,10 +11,11 @@ The volume makes that even if we detroy the container, the data of the database 
 ### 1-3 Document your database container essentials: commands and Dockerfile.
 
 
-docker build -t Alik265/postgress .
+docker build -t Alik265/postgres .
 
-docker run -d --name postgress -e POSTGRES_PASSWORD=pwd -p 5432:5432 Alik265/postgress
+docker run -d --name postgres --network app-network -v postgres-data:/var/lib/postgresql/data --env-file .env -p 5432:5432 Alik265/postgres
 
+>docker run -d --name spring-app --network app-network -p 8081:8080 --env-file .env Alik265/spring-app
 docker ps
 
 
