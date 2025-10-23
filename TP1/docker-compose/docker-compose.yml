@@ -1,0 +1,44 @@
+services:
+    backend:
+        container_name: spring-app
+        build:
+            context: ../spring-app
+            dockerfile: Dockerfile
+        networks:
+            - app-network
+        depends_on:
+            - database
+        env_file:
+            - ../.env
+        
+
+    database:
+        container_name: postgres
+        build:
+            context: ../database_postgress
+            dockerfile: Dockerfile
+        networks:
+            - app-network
+        env_file:
+            - ../.env
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+
+    httpd:
+        container_name: http-server
+        build:
+            context: ../Http_server
+            dockerfile: Dockerfile
+        ports:
+            - "8080:80"
+        networks:
+            - app-network
+        depends_on:
+            - backend
+
+networks:
+    app-network:
+        driver: bridge
+
+volumes:
+    postgres-data:

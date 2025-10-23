@@ -57,3 +57,24 @@ WORKDIR $MYAPP_HOME
 COPY --from=myapp-build $MYAPP_HOME/target/*.jar $MYAPP_HOME/myapp.jar
 
 ENTRYPOINT ["java", "-jar", "myapp.jar"]
+
+
+## 1-5 Why do we need a reverse proxy?
+We need a reverse proxy so that the client server can connect to the backend or other services.
+
+Commands to make the app work
+
+postgres
+docker build -t Alik265/postgres
+docker rm -f postgres
+
+docker run -d --name postgres --network app-network -v postgres-data:/var/lib/postgresql/data --env-file .env -p 5432:5432 Alik265/postgres     
+
+Apache
+docker build -t Alik265/my-apache2
+
+docker run --network app-network -dit --name my-apache -p 8080:80 Alik265/my-apache2
+
+spring
+
+docker run -d --name spring-app --network app-network -p 8081:8080 --env-file .env Alik265/spring-app                                      
