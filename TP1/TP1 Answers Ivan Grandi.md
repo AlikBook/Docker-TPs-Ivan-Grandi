@@ -12,7 +12,7 @@ The -e flag is used to specify our environments variables. For example, to creat
 
 The volume saves the data from the database. Even if if we detroy the container, the data of the database is not lost.
 
-### 1-3 Document your database container essentials: commands and Dockerfile.
+**1-3 Document your database container essentials: commands and Dockerfile.**
 
 Build the container from the image
 ```
@@ -35,7 +35,7 @@ docker run -d --name spring-app --network app-network -p 8081:8080 --env-file .e
 docker ps
 ```
 
-### 1-4 Why do we need a multistage build? And explain each step of this dockerfile.
+**1-4 Why do we need a multistage build? And explain each step of this dockerfile.**
 
 A multistage build is used to save space. We can create an image that will build the necessary files for an app to work. Then we can create a second image that will directly use the compiled files from the previous image. This will save time as we must not build and compile files everytime we want to start  an app.
 
