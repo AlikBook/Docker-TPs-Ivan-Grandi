@@ -21,4 +21,4 @@ jobs:
      #finally build your app with the latest command
       - name: Build and test with Maven
         run: mvn -B clean verify
-        working-directory: TP1/spring-app
+        working-directory: TD2/simple-api
