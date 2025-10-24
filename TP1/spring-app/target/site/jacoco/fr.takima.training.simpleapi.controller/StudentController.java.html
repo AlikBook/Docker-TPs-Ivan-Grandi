@@ -42,7 +42,7 @@ public class StudentController {
 <span class="nc" id="L42">            savedStudent = this.studentService.addStudent(student);</span>
 <span class="nc" id="L43">        } catch (IllegalArgumentException e) {</span>
 <span class="nc" id="L44">            return ResponseEntity.badRequest().build();</span>
-<span class="nc" id="L45">        }</span>
+        }
 
 <span class="nc" id="L47">        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path(&quot;/{id}&quot;)</span>
 <span class="nc" id="L48">                .buildAndExpand(savedStudent.getId()).toUri();</span>
