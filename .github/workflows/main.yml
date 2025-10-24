@@ -20,5 +20,5 @@ jobs:
 
      #finally build your app with the latest command
       - name: Build and test with Maven
-        run: mvn -B clean verify
-        working-directory: TD2/simple-api
+        run: mvn clean verify
+        working-directory: TD2\tp-devops-correction-docker\simple-api
