@@ -84,4 +84,6 @@ jobs:
       - name: Deploy with Ansible
         env:
             ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-        run: echo "$ANSIBLE_VAULT_PASSWORD" > vault_pass.txt ansible-playbook -i inventories/setup.yml playbook.yml --vault-password-file vault_pass.txt
+        run: |
+          echo "$ANSIBLE_VAULT_PASSWORD" > vault_pass.txt
+          ansible-playbook -i inventories/setup.yml playbook.yml --vault-password-file vault_pass.txt
