@@ -81,22 +81,15 @@ jobs:
      #checkout your github code using actions/checkout@v4
       - uses: actions/checkout@v4
         
-      - name: Set up SSH
-        env:
-          ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-        run: |
-          mkdir -p ~/.ssh
-          cd ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > id_rsa
-          chmod 400 id_rsa
-    
       - name: Deploy with Ansible
         env:
-            ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-            ANSIBLE_USER : ${{ secrets.ANSIBLE_USER }}
-            ANSIBLE_HOST : ${{ secrets.ANSIBLE_HOST }}
+          ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+          ANSIBLE_HOST: ${{ secrets.ANSIBLE_HOST }}
         run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 400 ~/.ssh/id_rsa
+          ssh-keyscan $ANSIBLE_HOST >> ~/.ssh/known_hosts
           cd ansible
-          ssh -i ~/.ssh/id_rsa $ANSIBLE_USER@$ANSIBLE_HOST
           echo "$ANSIBLE_VAULT_PASSWORD" > vault_pass.txt
-          ansible-playbook -i inventories/setup.yml playbook.yml --vault-password-file vault_pass.txt
+          ansible-playbook -i inventories/setup.yml playbook.yml --vault-password-file vault_pass.txt --private-key ~/.ssh/id_rsa
