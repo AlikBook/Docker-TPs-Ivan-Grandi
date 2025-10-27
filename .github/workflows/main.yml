@@ -73,6 +73,7 @@ jobs:
 
       - name: Use Sonar cloud
         run: mvn -B verify sonar:sonar -Dsonar.projectKey=AlikBook_Docker-TPs-Ivan-Grandi -Dsonar.organization=alikbook -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}  --file TP1/spring-app/pom.xml  
+
   update-production: 
     needs: [build-and-push-docker-image]
     runs-on: ubuntu-24.04
@@ -80,11 +81,22 @@ jobs:
      #checkout your github code using actions/checkout@v4
       - uses: actions/checkout@v4
         
-     #finally build your app with the latest command
+      - name: Set up SSH
+        env:
+          ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+        run: |
+          mkdir -p ~/.ssh
+          cd ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > id_rsa
+          chmod 400 id_rsa
+    
       - name: Deploy with Ansible
         env:
             ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+            ANSIBLE_USER : ${{ secrets.ANSIBLE_USER }}
+            ANSIBLE_HOST : ${{ secrets.ANSIBLE_HOST }}
         run: |
           cd ansible
+          ssh -i ~/.ssh/id_rsa $ANSIBLE_USER@$ANSIBLE_HOST
           echo "$ANSIBLE_VAULT_PASSWORD" > vault_pass.txt
           ansible-playbook -i inventories/setup.yml playbook.yml --vault-password-file vault_pass.txt
