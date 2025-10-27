@@ -25,3 +25,4 @@ jobs:
         working-directory: TP1/spring-app
       - name : Use Sonar cloud
         run: mvn -B verify sonar:sonar -Dsonar.projectKey=AlikBook_Docker-TPs-Ivan-Grandi -Dsonar.organization=alikbook -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}  --file TP1/spring-app/pom.xml
+        
