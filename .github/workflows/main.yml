@@ -23,6 +23,42 @@ jobs:
       - name: Build and test with Maven
         run: mvn clean verify
         working-directory: TP1/spring-app 
+  build-and-push-docker-image:
+    needs: [test-backend]
+
+    # run only when code is compiling and tests are passing
+    runs-on: ubuntu-24.04
+
+    # steps to perform in job
+    steps:
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build image and push backend
+        uses: docker/build-push-action@v6
+        with:
+          # relative path to the place where source code with Dockerfile is located
+          context: ./TP1/spring-app
+          # Note: tags has to be all lower-case
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-simple-api:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build image and push database
+        uses: docker/build-push-action@v6
+        with:
+          context: ./TP1/database_postgress
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-database:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build image and push httpd
+        uses: docker/build-push-action@v6
+        with:
+          context: ./TP1/Http_server
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-httpd:latest
+          push: ${{ github.ref == 'refs/heads/main' }}    
   test_sonar:
     needs: test-backend
     runs-on: ubuntu-24.04
@@ -36,5 +72,16 @@ jobs:
           java-version: '21'
 
       - name: Use Sonar cloud
-        run: mvn -B verify sonar:sonar -Dsonar.projectKey=AlikBook_Docker-TPs-Ivan-Grandi -Dsonar.organization=alikbook -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}  --file TP1/spring-app/pom.xml
+        run: mvn -B verify sonar:sonar -Dsonar.projectKey=AlikBook_Docker-TPs-Ivan-Grandi -Dsonar.organization=alikbook -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}  --file TP1/spring-app/pom.xml  
+  update-production: 
+    needs: [build-and-push-docker-image]
+    runs-on: ubuntu-24.04
+    steps:
+     #checkout your github code using actions/checkout@v4
+      - uses: actions/checkout@v4
         
+     #finally build your app with the latest command
+      - name: Deploy with Ansible
+        env:
+            ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+        run: echo "$ANSIBLE_VAULT_PASSWORD" > vault_pass.txt ansible-playbook -i inventories/setup.yml playbook.yml --vault-password-file vault_pass.txt
