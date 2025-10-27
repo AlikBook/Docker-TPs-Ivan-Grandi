@@ -1,0 +1,15 @@
+- hosts: all
+  gather_facts: true
+  become: true
+
+  vars_files:
+      - ansible/group_vars/all/vault.yml
+  roles:
+    - install
+    - login
+    - network
+    - database
+    - app
+    - proxy
+    
+  

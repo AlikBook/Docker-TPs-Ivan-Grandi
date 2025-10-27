@@ -1,0 +1,5 @@
+- name: Log in to DockerHub
+  docker_login:
+    username: "{{ dockerhub_username }}"
+    password: "{{ dockerhub_token }}"
+    registry_url: https://index.docker.io/v1/

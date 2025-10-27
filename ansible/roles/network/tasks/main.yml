@@ -1,0 +1,6 @@
+- name: Create network database-app
+  docker_network:
+    name: database-app-network
+- name: Create network app-proxy
+  docker_network:
+    name: app-proxy-network

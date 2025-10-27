@@ -1,0 +1,10 @@
+- name: Run HTTPD
+  docker_container:
+    name: httpd
+    image: alik265/tp-devops-httpd:latest
+    networks:
+      - name: app-proxy-network
+
+    ports:
+      - "80:80"
+    restart_policy: never

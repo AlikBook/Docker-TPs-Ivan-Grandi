@@ -1,0 +1,4 @@
+- name: Create Docker volume for database
+  docker_volume:
+    name: postgres-data
+    state: present

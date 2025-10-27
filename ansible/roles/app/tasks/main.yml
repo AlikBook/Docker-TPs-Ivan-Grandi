@@ -1,0 +1,12 @@
+- name: Run backend
+  docker_container:
+    name: spring-app
+    image: alik265/tp-devops-simple-api:latest
+    networks:
+      - name: database-app-network
+      - name: app-proxy-network
+    env:
+      POSTGRES_DB: "{{ POSTGRES_DB }}"
+      POSTGRES_USER: "{{ POSTGRES_USER }}"
+      POSTGRES_PASSWORD: "{{ POSTGRES_PASSWORD }}"
+    restart_policy: on-failure:3
