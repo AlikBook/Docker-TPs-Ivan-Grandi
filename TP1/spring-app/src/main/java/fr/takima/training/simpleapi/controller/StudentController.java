@@ -11,7 +11,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping(value = "/students")
 public class StudentController {
     private final StudentService studentService;
