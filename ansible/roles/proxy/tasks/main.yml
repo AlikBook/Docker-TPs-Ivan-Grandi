@@ -2,6 +2,7 @@
   docker_container:
     name: httpd
     image: alik265/tp-devops-httpd:latest
+    pull: true
     networks:
       - name: app-proxy-network
 
