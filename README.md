@@ -1,3 +1,3 @@
 # Docker-TPs-Ivan-Grandi
 
-Les commandes et réponses se trouvent dans les dossiers de chaque TD et TP.
+Les réponses pour chaque TP se trouvent dans le root du repository sous format markdown. 
