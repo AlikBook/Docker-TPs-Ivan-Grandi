@@ -4,13 +4,13 @@ Major : Software Engineering
 
 **1-1 For which reason is it better to run the container with a flag -e to give the environment variables rather than put them directly in the Dockerfile?**
 
-The -e flag is used to specify our environments variables. For example, to create a postgress cotainer we need to insert the password for our database which is in an env file. This practice is safe as the information such as passwords are confidential. We cannot put them in the github because people will have access to it.
+The -e flag is used to specify our environments variables. For example, to create a postgress container, we need to insert the password for our database. By putting the password in a .env file and specifying in the command the -e flag then the password will be automatically retireved. This practice is safe as the information such as passwords are confidential. 
 
 
 
 **1-2 Why do we need a volume to be attached to our postgres container?**
 
-The volume saves the data from the database. Even if if we detroy the container, the data of the database is not lost.
+The volume saves the data from the database. Even if if we detroy the container, the data is not lost.
 
 **1-3 Document your database container essentials: commands and Dockerfile.**
 
@@ -37,7 +37,7 @@ docker ps
 
 **1-4 Why do we need a multistage build? And explain each step of this dockerfile.**
 
-A multistage build is used to save space. We can create an image that will build the necessary files for an app to work. Then we can create a second image that will directly use the compiled files from the previous image. This will save time as we must not build and compile files everytime we want to start  an app.
+A multistage build is used to save space. We can create an image that will build the necessary files for an app to work. Then we can create a second image that will directly use the compiled files from the previous image. This will save time as we won't have to build everything and we can directly compile files everytime we want to start  an app.
 
 Docker file
 ```
@@ -204,4 +204,4 @@ Push the image to docker hub
 
 Having our images in an online repository is better as we can access them from any machine.
 They can be used also as a backup image if things get messed up and we need to return to a previous state of the image.
-Also if we lose the image in our machine or directly we lose our machine then we will be able to recover the image from the docker-hub repo.
+Also if we lose the image in our machine or directly we lose our machine then we will be able to recover the image from the docker-hub repository.
