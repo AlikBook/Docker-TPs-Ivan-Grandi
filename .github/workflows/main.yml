@@ -91,11 +91,17 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-
+      - name: Add known host
+        env:
+          ANSIBLE_HOST: ${{ secrets.ANSIBLE_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "$ANSIBLE_HOST" >> ~/.ssh/known_hosts
+          
       - name: Deploy with Ansible
         env:
           ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
         run: |
           cd ansible
           echo "$ANSIBLE_VAULT_PASSWORD" > vault_pass.txt
-          ansible-playbook -i inventories/setup.yml playbook.yml --vault-password-file vault_pass.txt 
+          ansible-playbook -i inventories/setup.yml playbook.yml --vault-password-file vault_pass.txt
