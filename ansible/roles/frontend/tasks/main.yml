@@ -1,7 +1,7 @@
 - name: Run frontend
   docker_container:
     name: frontend
-    image: alik265/tp-devops-frontend:latest
+    image: alik265/tp-devops-front-end:latest
     pull: true
     networks:
       - name: app-proxy-network
