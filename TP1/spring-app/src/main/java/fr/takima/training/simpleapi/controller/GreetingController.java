@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin
 public class GreetingController {
 
     private static final String TEMPLATE = "Bonjour, %s!";
