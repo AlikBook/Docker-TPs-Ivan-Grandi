@@ -81,10 +81,10 @@ jobs:
      #checkout your github code using actions/checkout@v4
       - uses: actions/checkout@v4
         
-      - name: Install Ansible and Docker
+      - name: Install Ansible 
         run: |
           sudo apt update
-          sudo apt install -y ansible docker.io
+          sudo apt install -y ansible
 
       - name : Set SSH 
         uses: webfactory/ssh-agent@v0.9.0
