@@ -86,6 +86,13 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Add known host
+        env:
+          ANSIBLE_HOST: ${{ secrets.ANSIBLE_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "$ANSIBLE_HOST" >> ~/.ssh/known_hosts
+
       - name: Deploy with Ansible
         env:
           ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
