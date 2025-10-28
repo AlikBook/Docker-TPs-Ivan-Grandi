@@ -52,11 +52,11 @@ jobs:
           context: ./TP1/database_postgress
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-database:latest
           push: ${{ github.ref == 'refs/heads/main' }}
-          
+
       - name: Build front end image and push
         uses: docker/build-push-action@v6
         with:
-          context: ./TP1/devops-front-main
+          context: ./TP1/devops-front-main/devops-front-main
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-front-end:latest
           push: ${{ github.ref == 'refs/heads/main' }}
 
