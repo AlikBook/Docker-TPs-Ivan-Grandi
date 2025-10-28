@@ -13,7 +13,7 @@ public class GreetingController {
 
     private static final String INSTANCE = System.getenv().getOrDefault("BACKEND_INSTANCE", "unknown");
 
-    @GetMapping("/greeting")
+    @GetMapping("/")
     public Greeting greeting(@RequestParam(value = "name", defaultValue = "Monde") String name) {
         return new Greeting(counter.incrementAndGet(), String.format(TEMPLATE, name) + " from " + INSTANCE);
     }
