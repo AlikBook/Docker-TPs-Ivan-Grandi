@@ -150,4 +150,79 @@ The tasks were passed to the main.yml file in folder roles/docker/tasks.
 ```
 
 **3-3 Document your docker_container tasks configuration.**
+
+You can find the configuration in each of the roles in ansible/roles
+
+However here you can find the main containers
+
+Network
+```
+- name: Create network database-app
+  docker_network:
+    name: database-app-network
+- name: Create network app-proxy
+  docker_network:
+    name: app-proxy-network
+```
+
+Database
+
+```
+- name: Create database
+  docker_container:
+    name: app-database
+    image: alik265/tp-devops-database:latest
+    networks:
+      - name: database-app-network
+
+    env:
+      POSTGRES_DB: "{{ POSTGRES_DB }}"
+      POSTGRES_USER: "{{ POSTGRES_USER }}"
+      POSTGRES_PASSWORD: "{{ POSTGRES_PASSWORD }}"
+      
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart_policy: unless-stopped
+```
+
+App
+```
+- name: Run backend
+  docker_container:
+    name: spring-app
+    image: alik265/tp-devops-simple-api:latest
+    pull: true
+    networks:
+      - name: database-app-network
+      - name: app-proxy-network
+    env:
+      POSTGRES_DB: "{{ POSTGRES_DB }}"
+      POSTGRES_USER: "{{ POSTGRES_USER }}"
+      POSTGRES_PASSWORD: "{{ POSTGRES_PASSWORD }}"
+      DB_HOST: "app-database"
+      DB_PORT: "5432"
+
+    restart_policy: on-failure
+
+```
+
+Proxy
+```
+- name: Run HTTPD
+  docker_container:
+    name: httpd
+    image: alik265/tp-devops-httpd:latest
+    pull: true
+    networks:
+      - name: app-proxy-network
+
+    ports:
+      - "80:80"
+    restart_policy: no
+```
+
+
+
 **Is it really safe to deploy automatically every new image on the hub ? explain. What can I do to make it more secure?**
+
+Not for every container. For example, if the database has any problem and the backend tries to connect to it, it will reload infinetly and wasting memory usage. It is better to set some constraints like if the datababse fails the backend will try to connect 3 times, if not, stop trying.
