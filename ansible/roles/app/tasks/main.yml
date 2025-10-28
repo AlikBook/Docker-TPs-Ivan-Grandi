@@ -1,16 +1,33 @@
-- name: Run backend
+- name: Run backend-blue
   docker_container:
-    name: spring-app
+    name: backend-blue
     image: alik265/tp-devops-simple-api:latest
     pull: true
     networks:
       - name: database-app-network
       - name: app-proxy-network
     env:
+      BACKEND_INSTANCE: "blue"
       POSTGRES_DB: "{{ POSTGRES_DB }}"
       POSTGRES_USER: "{{ POSTGRES_USER }}"
       POSTGRES_PASSWORD: "{{ POSTGRES_PASSWORD }}"
       DB_HOST: "app-database"
       DB_PORT: "5432"
+    restart_policy: on-failure
 
+- name: Run backend-green
+  docker_container:
+    name: backend-green
+    image: alik265/tp-devops-simple-api:latest
+    pull: true
+    networks:
+      - name: database-app-network
+      - name: app-proxy-network
+    env:
+      BACKEND_INSTANCE: "green"
+      POSTGRES_DB: "{{ POSTGRES_DB }}"
+      POSTGRES_USER: "{{ POSTGRES_USER }}"
+      POSTGRES_PASSWORD: "{{ POSTGRES_PASSWORD }}"
+      DB_HOST: "app-database"
+      DB_PORT: "5432"
     restart_policy: on-failure
