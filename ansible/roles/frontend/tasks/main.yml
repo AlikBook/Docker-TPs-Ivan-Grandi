@@ -1,0 +1,9 @@
+- name: Run frontend
+  docker_container:
+    name: frontend
+    image: alik265/tp-devops-frontend:latest
+    pull: true
+    networks:
+      - name: app-proxy-network
+    restart_policy: on-failure
+    state: started

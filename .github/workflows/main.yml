@@ -52,6 +52,13 @@ jobs:
           context: ./TP1/database_postgress
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-database:latest
           push: ${{ github.ref == 'refs/heads/main' }}
+          
+      - name: Build front end image and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./TP1/devops-front-main
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-front-end:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Build image and push httpd
         uses: docker/build-push-action@v6
@@ -59,6 +66,8 @@ jobs:
           context: ./TP1/Http_server
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-httpd:latest
           push: ${{ github.ref == 'refs/heads/main' }}    
+
+      
   test_sonar:
     needs: test-backend
     runs-on: ubuntu-24.04
