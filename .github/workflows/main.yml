@@ -81,15 +81,15 @@ jobs:
      #checkout your github code using actions/checkout@v4
       - uses: actions/checkout@v4
         
+      - name : Set SSH 
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Deploy with Ansible
         env:
           ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          ANSIBLE_HOST: ${{ secrets.ANSIBLE_HOST }}
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 400 ~/.ssh/id_rsa
-          ssh-keyscan $ANSIBLE_HOST >> ~/.ssh/known_hosts
           cd ansible
           echo "$ANSIBLE_VAULT_PASSWORD" > vault_pass.txt
           ansible-playbook -i inventories/setup.yml playbook.yml --vault-password-file vault_pass.txt --private-key ~/.ssh/id_rsa
