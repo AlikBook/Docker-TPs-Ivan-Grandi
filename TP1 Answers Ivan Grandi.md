@@ -205,3 +205,4 @@ Push the image to docker hub
 Having our images in an online repository is better as we can access them from any machine.
 They can be used also as a backup image if things get messed up and we need to return to a previous state of the image.
 Also if we lose the image in our machine or directly we lose our machine then we will be able to recover the image from the docker-hub repository.
+
